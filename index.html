@@ -1,9 +1,8 @@
 <!--
 Ejercicio: Extiende la aplicación de lista de tareas agregando:
- sistema de categorías/etiquetas, 
+OK sistema de categorías/etiquetas, 
  búsqueda en tiempo real, 
- funcionalidad de arrastrar
- y soltar para reordenar tareas,
+ funcionalidad de arrastrar y soltar para reordenar tareas,
 OK -> modo oscuro/claro, 
  y persistencia en diferentes formatos (JSON, CSV). 
  Usa event delegation para todos los eventos y optimiza el rendimiento evitando manipulaciones innecesarias del
@@ -59,6 +58,9 @@ OK -> modo oscuro/claro,
       </button>
     </form>
 
+   <div class="buscador-container">
+        <input type="text" id="input-buscador" placeholder="🔍 Buscar en tus tareas...">
+    </div>
     <div class="filtros">
       <button class="filtro-btn active" data-filtro="todas">Todas</button>
       <button class="filtro-btn" data-filtro="pendientes">Pendientes</button>

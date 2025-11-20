@@ -225,5 +225,45 @@ boton.addEventListener('click', () => {
     }
 });
 
-
+// selector de etiqueta/categoría
 const selectCategoria = document.getElementById('select-categoria');
+
+//selector de búsqueda en tiempo real
+const inputBuscador = document.getElementById('input-buscador');
+
+//funcionalidad de busqueda
+
+function buscarTareas() {
+    const texto = inputBuscador.value.toLowerCase().trim();
+
+    // 1. Si el buscador está vacío, devolvemos el control a tu función original
+    if (texto === "") {
+        mostrarTareas(); // Vuelve a mostrar las tareas según los filtros (Pendientes/Todas)
+        return;
+    }
+
+    // 2. Si hay texto, filtramos sobre TODAS las tareas existentes
+    const tareasEncontradas = tareas.filter(tarea => 
+        tarea.texto.toLowerCase().includes(texto)
+    );
+
+    // 3. Limpiamos la lista visualmente
+    listaTareas.innerHTML = '';
+
+    // 4. Mostramos los resultados o un mensaje de vacío
+    if (tareasEncontradas.length === 0) {
+        listaTareas.innerHTML = `
+            <div class="empty-state">
+                <p>No se encontró ninguna tarea que diga "${texto}"</p>
+            </div>`;
+    } else {
+        // Reutilizamos tu función existente para pintar cada tarea encontrada
+        tareasEncontradas.forEach(tarea => {
+            const elemento = crearElementoTarea(tarea);
+            listaTareas.appendChild(elemento);
+        });
+    }
+}
+
+// Evento que dispara la función cada vez que escribes
+inputBuscador.addEventListener('input', buscarTareas);
