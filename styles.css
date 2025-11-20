@@ -387,3 +387,15 @@ nav {
     border-color: #555;
     color: white;
 }
+
+/*MOVER Y SOLTAR*/
+.tarea.dragging {
+    opacity: 0.5;
+    background-color: #e0e0e0;
+    border: 2px dashed #999;
+    cursor: grabbing; /* Manita cerrada */
+}
+
+.tarea {
+    cursor: grab; /* Manita abierta para indicar que se puede mover */
+}

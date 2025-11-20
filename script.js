@@ -36,6 +36,20 @@
       div.className = `tarea ${tarea.completada ? 'completed' : ''}`;
       div.dataset.id = tarea.id;
 
+      // --- INICIO DE LO NUEVO: Hacer draggable ---
+      div.setAttribute('draggable', 'true'); 
+      
+      // Evento: Cuando empiezas a arrastrar
+      div.addEventListener('dragstart', () => {
+          div.classList.add('dragging');
+      });
+
+      // Evento: Cuando sueltas (aquí guardamos el nuevo orden)
+      div.addEventListener('dragend', () => {
+          div.classList.remove('dragging');
+          guardarOrdenDespuesDeMover(); // <--- Llamamos a la nueva función
+      });
+
       // Si es una tarea vieja y no tiene categoría, asignamos 'general' por defecto
       const categoria = tarea.categoria || 'general';
 
@@ -267,3 +281,68 @@ function buscarTareas() {
 
 // Evento que dispara la función cada vez que escribes
 inputBuscador.addEventListener('input', buscarTareas);
+
+
+//funcionalidad mover y soltar
+
+// 1. Función para detectar dónde soltar la tarea
+listaTareas.addEventListener('dragover', (e) => {
+    e.preventDefault(); // Necesario para permitir soltar
+    
+    // Detectamos cuál es el elemento que se está arrastrando
+    const tareaArrastrada = document.querySelector('.dragging');
+    if (!tareaArrastrada) return;
+
+    // Buscamos sobre qué elemento estamos pasando el mouse
+    const siguienteTarea = obtenerSiguienteElemento(e.clientY);
+
+    // Si estamos al final, agregamos al final. Si no, insertamos antes del siguiente elemento.
+    if (siguienteTarea) {
+        listaTareas.insertBefore(tareaArrastrada, siguienteTarea);
+    } else {
+        listaTareas.appendChild(tareaArrastrada);
+    }
+});
+
+// 2. Algoritmo para calcular la posición exacta (Matemática del DOM)
+function obtenerSiguienteElemento(y) {
+    // Seleccionamos todas las tareas que NO estamos arrastrando
+    const tareasNoArrastradas = [...listaTareas.querySelectorAll('.tarea:not(.dragging)')];
+
+    return tareasNoArrastradas.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2; // Distancia al centro de la caja
+
+        // Si el offset es negativo (estamos arriba del centro) y es el más cercano a 0...
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+// 3. Función para Guardar el Nuevo Orden (Esta es la "moverTarea" que pediste)
+function guardarOrdenDespuesDeMover() {
+    // Solo guardamos si estamos viendo "Todas" y sin buscar (para evitar bugs visuales)
+    if (filtroActual !== 'todas' || (inputBuscador && inputBuscador.value.trim() !== '')) {
+        return; 
+    }
+
+    // Leemos el DOM actual para ver el nuevo orden visual
+    const tareasVisuales = document.querySelectorAll('.tarea');
+    const nuevoOrdenIds = Array.from(tareasVisuales).map(div => Number(div.dataset.id));
+
+    // Reordenamos el array de datos 'tareas' basándonos en el visual
+    const tareasReordenadas = [];
+    nuevoOrdenIds.forEach(id => {
+        const tareaEncontrada = tareas.find(t => t.id === id);
+        if (tareaEncontrada) {
+            tareasReordenadas.push(tareaEncontrada);
+        }
+    });
+
+    // Actualizamos la variable principal y guardamos en LocalStorage
+    tareas = tareasReordenadas;
+    guardarTareas();
+}
