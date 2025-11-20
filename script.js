@@ -36,9 +36,13 @@
       div.className = `tarea ${tarea.completada ? 'completed' : ''}`;
       div.dataset.id = tarea.id;
 
+      // Si es una tarea vieja y no tiene categoría, asignamos 'general' por defecto
+      const categoria = tarea.categoria || 'general';
+
       div.innerHTML = `
         <input type="checkbox" class="checkbox" ${tarea.completada ? 'checked' : ''}>
         <span class="texto-tarea">${tarea.texto}</span>
+        <span class="etiqueta etiqueta-${categoria}" style="margin-left: 10px;">${categoria}</span>
         <input type="text" class="editor" value="${tarea.texto}" maxlength="100">
         <div class="acciones">
           <button class="btn btn-small btn-primary btn-editar">Editar</button>
@@ -146,17 +150,20 @@
     btnAgregar.addEventListener('click', (e) => {
       e.preventDefault();
       const texto = inputTarea.value.trim();
+      const categoria = selectCategoria.value; 
 
       if (texto) {
         const nuevaTarea = {
           id: Date.now(),
           texto: texto,
           completada: false,
+          categoria: categoria,
           fechaCreacion: new Date().toISOString()
         };
 
         tareas.push(nuevaTarea);
         inputTarea.value = '';
+        selectCategoria.value = 'general';
         guardarTareas();
         actualizarEstadisticas();
 
@@ -203,8 +210,8 @@
 
 
 
-
- const boton = document.getElementById('theme-btn');
+// funcionalidad de modo oscuro/claro
+const boton = document.getElementById('theme-btn');
 const html = document.documentElement;
 
 boton.addEventListener('click', () => {
@@ -217,3 +224,6 @@ boton.addEventListener('click', () => {
         boton.textContent = "☀️ Modo Claro";
     }
 });
+
+
+const selectCategoria = document.getElementById('select-categoria');

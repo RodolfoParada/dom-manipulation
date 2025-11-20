@@ -245,7 +245,7 @@
       }
     }
 
-
+/* modo oscuro/claro  */
 
 nav {
     display: flex;
@@ -310,4 +310,46 @@ nav {
 [data-theme="dark"] .tarea.completed {
     background-color: #1e3a23; /* Verde muy oscuro */
     color: #aaa;
+}
+
+/* etiquetas */
+
+/* --- Estilos para el Selector --- */
+.select-custom {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* --- Estilos Base de la Etiqueta --- */
+.etiqueta {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  margin: 0 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap; /* Evita que la etiqueta se rompa en dos líneas */
+}
+
+/* --- Colores por Categoría --- */
+.etiqueta-general { background-color: #e0e0e0; color: #333; }
+.etiqueta-trabajo { background-color: #e3f2fd; color: #1565c0; }
+.etiqueta-personal { background-color: #f3e5f5; color: #7b1fa2; }
+.etiqueta-urgente { background-color: #ffebee; color: #c62828; }
+
+/* --- Ajuste para Modo Oscuro (opcional, agrégalo al final de tu bloque dark) --- */
+[data-theme="dark"] .select-custom {
+  background-color: #2d2d2d;
+  color: white;
+  border-color: #555;
+}
+
+/* funcionalida de etiquetas */
+.texto-tarea {
+  flex: 1; /* Esto hace que el texto ocupe todo el espacio disponible */
+  font-size: 16px;
 }

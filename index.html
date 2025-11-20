@@ -4,7 +4,7 @@ Ejercicio: Extiende la aplicación de lista de tareas agregando:
  búsqueda en tiempo real, 
  funcionalidad de arrastrar
  y soltar para reordenar tareas,
- modo oscuro/claro, 
+OK -> modo oscuro/claro, 
  y persistencia en diferentes formatos (JSON, CSV). 
  Usa event delegation para todos los eventos y optimiza el rendimiento evitando manipulaciones innecesarias del
  -->
@@ -45,6 +45,13 @@ Ejercicio: Extiende la aplicación de lista de tareas agregando:
     <form class="formulario-agregar">
       <div class="form-group">
         <input type="text" id="input-tarea" placeholder="Escribe una nueva tarea..." maxlength="100">
+        <select id="select-categoria" class="select-custom">
+        <option value="general">General</option>
+        <option value="trabajo">Trabajo</option>
+        <option value="personal">Personal</option>
+        <option value="urgente">Urgente</option>
+         <option value="compras">Compras</option>
+    </select>
         <button type="submit" class="btn btn-primary" id="btn-agregar">Agregar</button>
       </div>
       <button type="button" class="btn btn-danger" id="btn-limpiar-completadas" style="display: none;">
@@ -65,6 +72,8 @@ Ejercicio: Extiende la aplicación de lista de tareas agregando:
       </div>
     </div>
   </div>
+
+  
 
   <script src="/script.js"></script>
 </body>
