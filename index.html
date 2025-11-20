@@ -2,7 +2,7 @@
 Ejercicio: Extiende la aplicación de lista de tareas agregando:
 OK sistema de categorías/etiquetas, 
 OK búsqueda en tiempo real, 
- funcionalidad de arrastrar y soltar para reordenar tareas,
+ok funcionalidad de arrastrar y soltar para reordenar tareas,
 OK -> modo oscuro/claro, 
  y persistencia en diferentes formatos (JSON, CSV). 
  Usa event delegation para todos los eventos y optimiza el rendimiento evitando manipulaciones innecesarias del DOM
@@ -19,6 +19,7 @@ OK -> modo oscuro/claro,
 </head>
 <body>
     <nav>
+        <div id="export-container" style="display: flex; gap: 5px; margin-right: 10px;"></div>
          <button class="theme-toggle" id="theme-btn">🌙 Modo Oscuro</button>
     </nav>
     

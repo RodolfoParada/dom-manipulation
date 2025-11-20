@@ -346,3 +346,120 @@ function guardarOrdenDespuesDeMover() {
     tareas = tareasReordenadas;
     guardarTareas();
 }
+
+// persistencia de datos
+// ==========================================
+//  PERSISTENCIA AVANZADA: MENÚ DE EXPORTACIÓN
+// ==========================================
+
+// 1. Referencia al contenedor vacío en el Nav
+const exportContainer = document.getElementById('export-container');
+
+// 2. Generar el HTML del menú desde JS (Desplegable + Botón)
+// Creamos un selector y un botón pequeño con icono
+exportContainer.innerHTML = `
+    <select id="formato-export" class="select-custom" style="padding: 5px; font-size: 0.8rem;">
+        <option value="json">📄 JSON</option>
+        <option value="csv">📊 CSV</option>
+        <option value="excel">📗 Excel</option>
+    </select>
+    <button id="btn-descargar" class="btn btn-primary btn-small">⬇️</button>
+`;
+
+// 3. Lógica de Descarga
+const btnDescargar = document.getElementById('btn-descargar');
+const selectFormato = document.getElementById('formato-export');
+
+btnDescargar.addEventListener('click', () => {
+    if (tareas.length === 0) {
+        alert("No hay tareas para exportar.");
+        return;
+    }
+
+    const formato = selectFormato.value;
+    
+    switch(formato) {
+        case 'json':
+            exportarJSON();
+            break;
+        case 'csv':
+            exportarCSV();
+            break;
+        case 'excel':
+            exportarExcel();
+            break;
+    }
+});
+
+// --- FUNCIONES POR FORMATO ---
+
+function exportarJSON() {
+    // Convertimos el array de objetos a texto bonito (indentado)
+    const datos = JSON.stringify(tareas, null, 2);
+    descargarArchivo(datos, 'mis_tareas.json', 'application/json');
+}
+
+function exportarCSV() {
+    let csvContent = "ID,Tarea,Categoria,Estado,Fecha\n";
+    
+    tareas.forEach(t => {
+        // Reemplazamos comas por espacios para no romper el CSV
+        const texto = t.texto.replace(/,/g, " ");
+        const estado = t.completada ? "Completada" : "Pendiente";
+        const cat = t.categoria || "general";
+        
+        csvContent += `${t.id},${texto},${cat},${estado},${t.fechaCreacion}\n`;
+    });
+
+    // \uFEFF agrega el BOM para que Excel reconozca tildes y ñ en CSV
+    descargarArchivo("\uFEFF" + csvContent, 'mis_tareas.csv', 'text/csv;charset=utf-8;');
+}
+
+function exportarExcel() {
+    // TRUCO: Sin librerías, creamos una tabla HTML que Excel sabe abrir como .xls
+    let excelContent = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="UTF-8"></head>
+        <body>
+        <table border="1">
+            <thead>
+                <tr style="background-color: #4CAF50; color: white;">
+                    <th>ID</th>
+                    <th>Tarea</th>
+                    <th>Categoría</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    tareas.forEach(t => {
+        const colorEstado = t.completada ? '#d4edda' : '#ffffff';
+        excelContent += `
+            <tr style="background-color: ${colorEstado}">
+                <td>${t.id}</td>
+                <td>${t.texto}</td>
+                <td>${t.categoria || 'general'}</td>
+                <td>${t.completada ? 'Completada' : 'Pendiente'}</td>
+                <td>${t.fechaCreacion}</td>
+            </tr>
+        `;
+    });
+
+    excelContent += `</tbody></table></body></html>`;
+
+    descargarArchivo(excelContent, 'mis_tareas.xls', 'application/vnd.ms-excel');
+}
+
+// Función auxiliar maestra para generar la descarga
+function descargarArchivo(contenido, nombre, tipoMime) {
+    const blob = new Blob([contenido], { type: tipoMime });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = nombre;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
