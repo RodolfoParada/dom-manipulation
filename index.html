@@ -1,0 +1,71 @@
+<!--
+Ejercicio: Extiende la aplicación de lista de tareas agregando:
+ sistema de categorías/etiquetas, 
+ búsqueda en tiempo real, 
+ funcionalidad de arrastrar
+ y soltar para reordenar tareas,
+ modo oscuro/claro, 
+ y persistencia en diferentes formatos (JSON, CSV). 
+ Usa event delegation para todos los eventos y optimiza el rendimiento evitando manipulaciones innecesarias del
+ -->
+
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Lista de Tareas Interactiva</title>
+
+</head>
+<body>
+    <nav>
+         <button class="theme-toggle" id="theme-btn">🌙 Modo Oscuro</button>
+    </nav>
+    
+    <div class="contenedor">
+    <main>
+      <h1>📝 Lista de Tareas</h1>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-number" id="total-tareas">0</span>
+          <span>Total</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" id="tareas-completadas">0</span>
+          <span>Completadas</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" id="tareas-pendientes">0</span>
+          <span>Pendientes</span>
+        </div>
+      </div>
+    </main>
+
+    <form class="formulario-agregar">
+      <div class="form-group">
+        <input type="text" id="input-tarea" placeholder="Escribe una nueva tarea..." maxlength="100">
+        <button type="submit" class="btn btn-primary" id="btn-agregar">Agregar</button>
+      </div>
+      <button type="button" class="btn btn-danger" id="btn-limpiar-completadas" style="display: none;">
+        Limpiar Completadas
+      </button>
+    </form>
+
+    <div class="filtros">
+      <button class="filtro-btn active" data-filtro="todas">Todas</button>
+      <button class="filtro-btn" data-filtro="pendientes">Pendientes</button>
+      <button class="filtro-btn" data-filtro="completadas">Completadas</button>
+    </div>
+
+    <div class="lista-tareas" id="lista-tareas">
+      <div class="empty-state">
+        <h3>¡No hay tareas!</h3>
+        <p>Agrega tu primera tarea usando el formulario de arriba.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+</html>
